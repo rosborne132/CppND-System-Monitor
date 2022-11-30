@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
 #include "system.h"
@@ -12,9 +13,10 @@ using std::set;
 using std::size_t;
 using std::string;
 using std::vector;
-/*You need to complete the mentioned TODOs in order to satisfy the rubric criteria "The student will be able to extract and display basic data about the system."
 
-You need to properly format the uptime. Refer to the comments mentioned in format. cpp for formatting the uptime.*/
+/*
+    You need to properly format the uptime. Refer to the comments mentioned in format. cpp for formatting the uptime.
+*/
 
 // TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
@@ -29,7 +31,9 @@ std::string System::Kernel() { return string(); }
 float System::MemoryUtilization() { return 0.0; }
 
 // TODO: Return the operating system name
-std::string System::OperatingSystem() { return string(); }
+std::string System::OperatingSystem() {
+    return LinuxParser::OperatingSystem();
+}
 
 // TODO: Return the number of processes actively running on the system
 int System::RunningProcesses() { return 0; }
