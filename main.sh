@@ -9,6 +9,12 @@ case $1 in
     ./build/monitor
     ;;
 
+  debug)
+    make debug
+
+    ./build/monitor
+    ;;
+
   *)
     echo -n "unknown"
     ;;
