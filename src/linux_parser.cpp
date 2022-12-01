@@ -69,28 +69,10 @@ vector<int> LinuxParser::Pids() {
 }
 
 float LinuxParser::MemoryUtilization() {
-    string line;
-    string key;
-    string value;
-    string memTotal;
-    string memFree;
-    std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+    float memTotal = static_cast<float>(GetValueByKey(kProcDirectory + kMeminfoFilename, "MemTotal:"));
+    float memFree = static_cast<float>(GetValueByKey(kProcDirectory + kMeminfoFilename, "MemFree:"));
 
-    if (filestream.is_open()) {
-        while (std::getline(filestream, line)) {
-            std::istringstream linestream(line);
-
-            while (linestream >> key >> value) {
-                if (key == "MemTotal:") {
-                    memTotal = value;
-                } else if (key == "MemFree:") {
-                    memFree = value;
-                }
-            }
-        }
-    }
-
-    return (stof(memTotal) - stof(memFree)) / stof(memTotal);
+    return (memTotal - memFree) / memTotal;
 }
 
 // TODO: Read and return the system uptime
@@ -112,42 +94,33 @@ long LinuxParser::IdleJiffies() { return 0; }
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
-int LinuxParser::TotalProcesses() {
+int LinuxParser::GetValueByKey(string filePath, string searchKey) {
     string line;
     string key;
     string value;
-    std::ifstream filestream(kProcDirectory + kStatFilename);
+    std::ifstream filestream(filePath);
 
     if (filestream.is_open()) {
         while (std::getline(filestream, line)) {
             std::istringstream linestream(line);
 
             while (linestream >> key >> value) {
-                if (key == "processes") {
+                if (key == searchKey) {
                     return stoi(value);
                 }
             }
         }
     }
+
+    return 0;
+}
+
+int LinuxParser::TotalProcesses() {
+    return GetValueByKey(kProcDirectory + kStatFilename, "processes");
 }
 
 int LinuxParser::RunningProcesses() {
-    string line;
-    string key;
-    string value;
-    std::ifstream filestream(kProcDirectory + kStatFilename);
-
-    if (filestream.is_open()) {
-        while (std::getline(filestream, line)) {
-            std::istringstream linestream(line);
-
-            while (linestream >> key >> value) {
-                if (key == "procs_running") {
-                    return stoi(value);
-                }
-            }
-        }
-    }
+    return GetValueByKey(kProcDirectory + kStatFilename, "procs_running");
  }
 
 // TODO: Read and return the command associated with a process
