@@ -120,7 +120,6 @@ long LinuxParser::ActiveJiffies(int pid) {
 long LinuxParser::ActiveJiffies() {
     vector<string> jiffies = CpuUtilization();
 
-    // Possible area of refactor
     return stol(jiffies[CPUStates::kUser_]) + stol(jiffies[CPUStates::kNice_]) +
            stol(jiffies[CPUStates::kSystem_]) + stol(jiffies[CPUStates::kIRQ_]) +
            stol(jiffies[CPUStates::kSoftIRQ_]) + stol(jiffies[CPUStates::kSteal_]);
