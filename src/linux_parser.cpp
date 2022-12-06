@@ -217,17 +217,7 @@ string LinuxParser::User(int pid) {
 
 long LinuxParser::UpTime(int pid) {
     string line, value;
-    vector<string> values;
-    std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
-
-    if (stream.is_open()) {
-        std::getline(stream, line);
-        std::istringstream linestream(line);
-
-        while (linestream >> value) {
-            values.push_back(value);
-        };
-    }
+    vector<string> values = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
 
     return LinuxParser::UpTime() - (stol(values[21]) / 100);
 }

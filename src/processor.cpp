@@ -2,8 +2,5 @@
 #include "linux_parser.h"
 
 float Processor::Utilization() {
-    long total = LinuxParser::Jiffies();
-    long active = LinuxParser::ActiveJiffies();
-
-    return active * (1.f / total);
+    return static_cast<float>(LinuxParser::ActiveJiffies() * (1.f / LinuxParser::Jiffies()));
 }
