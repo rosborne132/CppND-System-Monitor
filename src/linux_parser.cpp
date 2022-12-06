@@ -1,4 +1,3 @@
-#include <iostream>
 #include <dirent.h>
 #include <unistd.h>
 #include <sstream>
@@ -77,8 +76,7 @@ float LinuxParser::MemoryUtilization() {
 }
 
 long LinuxParser::UpTime() {
-    string uptime;
-    string line;
+    string uptime, line;
     std::ifstream stream(kProcDirectory + kUptimeFilename);
 
     if (stream.is_open()) {
@@ -139,9 +137,7 @@ vector<string> LinuxParser::CpuUtilization() {
 }
 
 string LinuxParser::GetValueByKey(string filePath, string searchKey) {
-    string line;
-    string key;
-    string value;
+    string line, key, value;
     std::ifstream filestream(filePath);
 
     if (filestream.is_open()) {
@@ -158,8 +154,7 @@ string LinuxParser::GetValueByKey(string filePath, string searchKey) {
 }
 
 vector<string> LinuxParser::GetAllValues(std::string filePath) {
-    string line, value;
-    string key;
+    string line, value, key;
     vector<string> values;
     std::ifstream stream(filePath);
 
@@ -167,6 +162,7 @@ vector<string> LinuxParser::GetAllValues(std::string filePath) {
         std::getline(stream, line);
         std::istringstream linestream(line);
         linestream >> key;
+
         while (linestream >> value) {
             values.push_back(value);
         };
@@ -195,7 +191,7 @@ string LinuxParser::Command(int pid) {
 }
 
 string LinuxParser::Ram(int pid) {
-    return to_string(stol(GetValueByKey(kProcDirectory + kMeminfoFilename, "VmSize:")) / 1024);
+    return to_string(stol(GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:")) / 1024);
 }
 
 string LinuxParser::Uid(int pid) {
@@ -203,8 +199,7 @@ string LinuxParser::Uid(int pid) {
 }
 
 string LinuxParser::User(int pid) {
-    string line;
-    string name, x, uid;
+    string line, name, x, uid;
     std::ifstream stream(kPasswordPath);
 
     if (stream.is_open()) {
@@ -229,6 +224,7 @@ long LinuxParser::UpTime(int pid) {
     if (stream.is_open()) {
         std::getline(stream, line);
         std::istringstream linestream(line);
+
         while (linestream >> value) {
             values.push_back(value);
         };
