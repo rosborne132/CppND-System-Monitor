@@ -22,7 +22,7 @@ vector<Process>& System::Processes() {
 
     for (int pid : pids) {
         Process process(pid);
-        processes_.push_back(process);
+        processes_.emplace_back(process);
     }
 
     std::sort(processes_.rbegin(),processes_.rend());

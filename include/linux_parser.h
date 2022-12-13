@@ -50,6 +50,7 @@ long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
 long IdleJiffies();
+long CalcTotalJiffies(std::vector<CPUStates> cpuStates,  std::vector<std::string> jiffies);
 
 // Processes
 std::string Command(int pid);

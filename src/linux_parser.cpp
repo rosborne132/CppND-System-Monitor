@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "linux_parser.h"
 
@@ -88,11 +89,19 @@ long LinuxParser::UpTime() {
     return stol(uptime);
  }
 
+long LinuxParser::CalcTotalJiffies(vector<LinuxParser::CPUStates> cpuStates,  vector<string> jiffies) {
+    long totalJiffies = 0;
+
+    for (int cpuState : cpuStates) {
+        totalJiffies += stol(jiffies[cpuState]);
+    };
+
+    return totalJiffies;
+}
+
 long LinuxParser::Jiffies() {
-    vector<string> values = LinuxParser::CpuUtilization();
-    vector<long> valuesLong(10, 0);
-    long total = 0;
-    vector<CPUStates> allStates = {
+    vector<string> jiffies = LinuxParser::CpuUtilization();
+    vector<CPUStates> cpuStates = {
         kUser_,
         kNice_,
         kSystem_,
@@ -103,12 +112,7 @@ long LinuxParser::Jiffies() {
         kSteal_
     };
 
-    for (int i : allStates) {
-        valuesLong[i] = stol(values[i]);
-        total += valuesLong[i];
-    };
-
-    return total;
+    return LinuxParser::CalcTotalJiffies(cpuStates, jiffies);
 }
 
 long LinuxParser::ActiveJiffies(int pid) {
@@ -119,16 +123,26 @@ long LinuxParser::ActiveJiffies(int pid) {
 
 long LinuxParser::ActiveJiffies() {
     vector<string> jiffies = CpuUtilization();
+    vector<CPUStates> cpuStates = {
+        kUser_,
+        kNice_,
+        kSystem_,
+        kIRQ_,
+        kSoftIRQ_,
+        kSteal_
+    };
 
-    return stol(jiffies[CPUStates::kUser_]) + stol(jiffies[CPUStates::kNice_]) +
-           stol(jiffies[CPUStates::kSystem_]) + stol(jiffies[CPUStates::kIRQ_]) +
-           stol(jiffies[CPUStates::kSoftIRQ_]) + stol(jiffies[CPUStates::kSteal_]);
+    return LinuxParser::CalcTotalJiffies(cpuStates, jiffies);
 }
 
 long LinuxParser::IdleJiffies() {
     vector<string> jiffies = CpuUtilization();
+    vector<CPUStates> cpuStates = {
+        kIdle_,
+        kIOwait_
+    };
 
-    return stol(jiffies[CPUStates::kIdle_]) + stol(jiffies[CPUStates::kIOwait_]);
+    return LinuxParser::CalcTotalJiffies(cpuStates, jiffies);
 }
 
 vector<string> LinuxParser::CpuUtilization() {
