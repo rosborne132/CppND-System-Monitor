@@ -116,9 +116,9 @@ long LinuxParser::Jiffies() {
 }
 
 long LinuxParser::ActiveJiffies(int pid) {
-    vector<string> values = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
+    vector<string> jiffies = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
 
-    return stol(values[13] + values[14]);
+    return stol(jiffies[13] + jiffies[14] + jiffies[15] + jiffies[16]);
 }
 
 long LinuxParser::ActiveJiffies() {
@@ -204,7 +204,7 @@ string LinuxParser::Command(int pid) {
 }
 
 string LinuxParser::Ram(int pid) {
-    return to_string(stol(GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:")) / 1024);
+    return to_string(stol(GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:")) / 1000);
 }
 
 string LinuxParser::Uid(int pid) {
@@ -227,12 +227,11 @@ string LinuxParser::User(int pid) {
         }
     }
 
-    return "unknown";
+    return "UNKNOWN_USER";
 }
 
 long LinuxParser::UpTime(int pid) {
-    string line, value;
-    vector<string> values = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
+    vector<string> processes = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
 
-    return LinuxParser::UpTime() - (stol(values[21]) / 100);
+    return LinuxParser::UpTime() - (stol(processes[21]) / 100);
 }
