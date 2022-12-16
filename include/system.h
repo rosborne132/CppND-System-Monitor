@@ -11,6 +11,7 @@ class System {
  public:
   Processor& Cpu();
   std::vector<Process>& Processes();
+  std::vector<Process> CreateProcesses(std::vector<int> pids);
   float MemoryUtilization();
   long UpTime();
   int TotalProcesses();

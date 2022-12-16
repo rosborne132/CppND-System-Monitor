@@ -233,5 +233,5 @@ string LinuxParser::User(int pid) {
 long LinuxParser::UpTime(int pid) {
     vector<string> processes = LinuxParser::GetAllValues(kProcDirectory + to_string(pid) + kStatFilename);
 
-    return LinuxParser::UpTime() - (stol(processes[21]) / 100);
+    return LinuxParser::UpTime() - (stol(processes[21]) / sysconf(_SC_CLK_TCK));
 }

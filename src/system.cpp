@@ -1,7 +1,7 @@
-#include <unistd.h>
 #include <cstddef>
 #include <set>
 #include <string>
+#include <unistd.h>
 #include <vector>
 
 #include "linux_parser.h"
@@ -20,36 +20,33 @@ vector<Process>& System::Processes() {
     vector<int> pids = LinuxParser::Pids();
     processes_.clear();
 
-    for (int pid : pids) {
-        Process process(pid);
-        processes_.emplace_back(process);
-    }
-
-    std::sort(processes_.rbegin(),processes_.rend());
+    vector<Process> newProcesses = CreateProcesses(pids);
+    processes_ = newProcesses;
 
     return processes_;
 }
 
-std::string System::Kernel() {
-    return LinuxParser::Kernel();
-}
+vector<Process> System::CreateProcesses(vector<int> pids) {
+    vector<Process> processes;
 
-float System::MemoryUtilization() {
-    return LinuxParser::MemoryUtilization();
-}
+    for (int pid : pids) {
+        Process process(pid);
+        processes.emplace_back(process);
+    }
 
-std::string System::OperatingSystem() {
-    return LinuxParser::OperatingSystem();
-}
+    std::sort(processes.rbegin(), processes.rend());
 
-int System::RunningProcesses() {
-    return LinuxParser::RunningProcesses();
-}
+    return processes;
+};
 
-int System::TotalProcesses() {
-    return LinuxParser::TotalProcesses();
-}
+std::string System::Kernel() { return LinuxParser::Kernel(); }
 
-long int System::UpTime() {
-    return LinuxParser::UpTime();
-}
+float System::MemoryUtilization() { return LinuxParser::MemoryUtilization(); }
+
+std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }
+
+int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
+
+int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
+
+long int System::UpTime() { return LinuxParser::UpTime(); }
