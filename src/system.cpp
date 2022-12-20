@@ -16,6 +16,8 @@ using std::vector;
 
 Processor& System::Cpu() { return cpu_; }
 
+// Based on duringhof's approach
+// https://github.com/duringhof/CppND-Project-SystemMonitor/blob/3ea4b3df0959561b3ab79c33ade825b5854dc5fa/src/system.cpp
 vector<Process>& System::Processes() {
     vector<int> pids = LinuxParser::Pids();
     processes_.clear();

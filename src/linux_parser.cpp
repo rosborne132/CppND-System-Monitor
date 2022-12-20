@@ -211,6 +211,8 @@ string LinuxParser::Uid(int pid) {
     return GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "Uid:");
 }
 
+// Based on duringhof's approach
+// https://github.com/duringhof/CppND-Project-SystemMonitor/blob/3ea4b3df0959561b3ab79c33ade825b5854dc5fa/src/linux_parser.cpp
 string LinuxParser::User(int pid) {
     string line, name, x, uid;
     string userUid = LinuxParser::Uid(pid);
