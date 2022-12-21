@@ -204,7 +204,7 @@ string LinuxParser::Command(int pid) {
 }
 
 string LinuxParser::Ram(int pid) {
-    return to_string(stol(GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:")) / 1000);
+    return to_string(stol(GetValueByKey(kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:")) / 1024);
 }
 
 string LinuxParser::Uid(int pid) {

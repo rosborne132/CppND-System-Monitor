@@ -6,18 +6,27 @@
 
 using std::string;
 using std::stringstream;
+using std::to_string;
 
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
+// Work based on project feedback.
 string Format::ElapsedTime(long seconds) {
-    int hh, mm, ss;
-    stringstream output;
-    hh = (seconds / 3600) % 100; // Number of hours returns to 0 after 99
-    mm = (seconds / 60) % 60;
-    ss = seconds % 60;
-    output << std::setfill('0') << std::setw(2) << hh << ":"
-           << std::setfill('0') << std::setw(2) << mm << ":"
-           << std::setfill('0') << std::setw(2) << ss;
+    // Create time conversion
+    long hours, minutes;
+    hours = seconds / 3600;
+    seconds = seconds % 3600;
+    minutes = seconds / 60;
+    seconds = seconds % 60;
 
-    return output.str();
+    string sec = to_string(seconds);
+    string mins = to_string(minutes);
+    string hrs = to_string(hours);
+
+    // Format time strings with values
+    sec.insert(0, 2 - sec.length(), '0');
+    mins.insert(0, 2 - mins.length(), '0');
+    hrs.insert(0, 2 - hrs.length(), '0');
+
+    return hrs + ":" + mins + ":" + sec;
 }
