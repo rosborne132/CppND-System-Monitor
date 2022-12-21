@@ -15,6 +15,7 @@ You are welcome to develop this project on your local machine, and you are not r
 Run the following scripts to easily perform project actions.
 ```bash
 ./main.sh start     // Starts project from build.
+./main.sh debug     // Creates a debug build.
 ```
 
 ## ncurses
